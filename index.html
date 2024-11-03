@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Budget</title>
+</head>
+<body id="docBody">
+    <header id="navBarHeader">
+        <div></div>
+        <button><i class="fa-solid fa-arrow-left"></i> To Transactions</button>
+        <h5>Master Budgeter</h5>
+    </header>
+
+    <section id="dashBoardContainer" class="whiteText">
+        <div id="dashboardHeaderDiv">
+            <h5><span id="budgetTotal" class="editableSpan">$10,000,000</span> Budget</h5>
+            <h5><span class="editableSpan">$10,000,000</span> Save Goal</h5>
+            <h5><span>$10,000,000</span> Left to Budget</h5>
+            <h5><span>$10,000,000</span> Saved This Month</h5>
+        </div>
+
+        <div id="accountsDiv" class="whiteText">
+            <h5>Checking: <span>$10,000,000</span></h5>
+            <h5>Credit: <span>$10,000,000</span></h5>
+            <h5>Savings: <span>$10,000,000</span></h5>
+        </div>
+
+        <div id="budgetDiv">
+
+        </div>
+    </section>
+
+    <div id="addCategoryContainer">
+        <form id="addCategoryForm" class="whiteText">
+            <h4>Add an Item</h4>
+            <label>Item Name: </label>
+            <input id="itemNameInput" class="whiteText" type="text">
+            <button id="addItemBtn" class="whiteText" type="submit">Add Item</button>
+            <button for="addCategoryForm" id="cancelItemBtn" class="whiteText" type="submit">Cancel</button>
+        </form>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
