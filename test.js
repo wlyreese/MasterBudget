@@ -1,10 +1,21 @@
 const itemEditableSpan = document.querySelectorAll("listTitleItem greenLi");
 
-const headerArray = [];
+const headerArray = () => {
+    const retrievedObjectString = localStorage.getItem('myObject');
+    const retrievedObject = JSON.parse(retrievedObjectString);
+    console.log(retrievedObject);
+    if(retrievedObject == null || retrievedObject == ''){
+        return [];
+    }else{
+        return retrievedObject;
+    }
+}
 
-const itemArray = [];
+const itemArray = headerArray();
 /* ON START */
+console.log(itemArray);
 renderList();
+
 
 /* TEXT/NUMBER FORMATTERS */
 /* FORMATTER FOR TO ADD DOLLAR AND REARRANGE NEGATIVE SIGNS */
@@ -44,9 +55,15 @@ function containsOtherChars(input) {
 /* Used to render the title of the budget items display */
 function renderList(){
     renderTitle();
-    if(itemArray.length !== 0){
-        itemArray[0].id = 0;
+    updateLeftToBudgetDisplay();
+    if(itemArray == undefined){
+        return;
     }
+
+    itemArray.forEach(item => {
+        let index = itemArray.indexOf(item);
+        item.id = index;
+    });
     const budgetDivDisplay = document.getElementById("budgetDiv");
 
     itemArray.forEach(item => {
@@ -54,25 +71,23 @@ function renderList(){
         newUl.classList.add("horizotalListItem");
         newUl.id = `${item.id}`
         newUl.innerHTML = `
-        <li class="listTitleItem">${item.name}</li>
-        <li id="${item.id + "li"}" class="listTitleItem greenLi" onclick="makeEditable(this, ${item.id})">${formatString((String(item.budget)))}</li>
-        <li class="listTitleItem">${formatString(String(item.spent))}</li>
-        <li class="listTitleItem">${formatString(String(item.actual))}</li>
-        <button onclick="deleteItem(${item.id})"><i class="fa-solid fa-trash"></i></button>
-        `;
+            <li class="listTitleItem">${item.name}</li>
+            <li id="${item.id + "li"}" class="listTitleItem greenLi" onclick="makeEditable(this, ${item.id})">${formatString((String(item.budget)))}</li>
+            <li class="listTitleItem">${formatString(String(item.spent))}</li>
+            <li class="listTitleItem">${formatString(String(item.actual))}</li>
+            <button onclick="deleteItem(${item.id})"><i class="fa-solid fa-trash"></i></button>
+            `;
         
         budgetDivDisplay.appendChild(newUl);
     });
-
-    updateLeftToBudgetDisplay();
-}
+};
 
 
 
 /* Used to render title and all items on list */
 function renderTitle(){
-
-    budgetDiv.textContent = " ";
+    const budgetDiv = document.getElementById("budgetDiv");
+    budgetDiv.textContent = "";
 
     titleUl = document.createElement("ul");
     titleUl.classList.add("horizotalListHeader");
@@ -94,23 +109,34 @@ function renderTitle(){
 function updateLeftToBudgetDisplay(){
     let totalAllocated = 0;
     const totalBudget = removeSymbolsAndConvertToNumber(document.getElementById("budgetTotal").textContent);
-    const saveGoal = removeSymbolsAndConvertToNumber(document.getElementById("saveGoalTotal").textContent)
-    itemArray.forEach(item => {
-        totalAllocated = item.budget + totalAllocated;
-    });
-    let leftToBudget = totalBudget - saveGoal - totalAllocated;
-    document.getElementById("leftToBudgetDisplay").textContent = formatString(String(leftToBudget));
-}
+    const saveGoal = removeSymbolsAndConvertToNumber(document.getElementById("saveGoalTotal").textContent);
+
+    if(itemArray == undefined || itemArray.length === 0){
+        leftToBudget = totalBudget - saveGoal;
+        document.getElementById("leftToBudgetDisplay").textContent = formatString(String(leftToBudget));
+    }else{
+        itemArray.forEach(item => {
+            totalAllocated = item.budget + totalAllocated;
+        });
+        let leftToBudget = totalBudget - saveGoal - totalAllocated;
+        document.getElementById("leftToBudgetDisplay").textContent = formatString(String(leftToBudget));
+    }
+};
 
 
 
 /* Create and append a new ul for display */
 function addItemToDisplay(event){
     event.preventDefault();
+    let id;
 
     const input = document.getElementById("itemNameInput").value;
-    const id = itemArray.length;
-    console.log(id);
+    console.log(itemArray);
+    if(itemArray === undefined){
+        id = 0;
+    }else{
+        id = itemArray.length;
+    }
 
     const newObject = {
         id: `${id}`,
@@ -120,8 +146,10 @@ function addItemToDisplay(event){
         actual: 0
     }
 
+
     addCategoryContainer.style.display = "none";
     itemArray.push(newObject);
+    convertToJSON(itemArray);
     renderList();
 }
 
@@ -152,6 +180,7 @@ function deleteItem(id){
     const index = itemArray.findIndex(item => item.id === id);
     itemArray.splice(index, 1);
 
+    convertToJSON(itemArray);
     renderList();
 }
 
@@ -173,6 +202,7 @@ function makeEditable(element, id){
         element.textContent = tempFormattedText;
 
         updateLeftToBudgetDisplay();
+        convertToJSON(itemArray);
     });
 
     element.addEventListener("keydown", (event) => {
@@ -182,6 +212,8 @@ function makeEditable(element, id){
         }
     });
 }
+
+/* EDIT AND UPDATE BUDGET SPANS FOR ELEMENTS */
 
 
 
@@ -229,4 +261,23 @@ function editSaveGoal(element){
             element.removeAttribute("contenteditable");
         }
     });
+}
+
+/* STORE DATA IN JSON */
+function convertToJSON(itemArray){
+    
+    if(itemArray[0] !== null){
+        itemArray.slice([0], 1);
+    }
+
+
+    const myArrayOfObjects = JSON.stringify(itemArray);
+    localStorage.setItem('myObject', myArrayOfObjects);
+    console.log(JSON.stringify(itemArray));
+    console.log(itemArray.indexOf(item => item.name == "No Items"));
+}
+
+/* UTILITY FUNCTION TO DELETE STORED JSON */
+function removeItem(item){
+    localStorage.removeItem(item);
 }

@@ -10,14 +10,14 @@
 <body id="docBody">
     <header id="navBarHeader">
         <div></div>
-        <button><i class="fa-solid fa-arrow-left"></i> To Transactions</button>
+        <button onclick="window.location.href='transactions.html'"><i class="fa-solid fa-arrow-left"></i> To Transactions</button>
         <h5>Master Budgeter</h5>
     </header>
 
     <section id="dashBoardContainer" class="whiteText">
         <div id="dashboardHeaderDiv">
             <h5><span id="budgetTotal" class="editableSpan" onclick="editBudget(this)">$100</span> Budget</h5>
-            <h5><span id="saveGoalTotal" onclick="editSaveGoal(this)" class="editableSpan">$100</span> Save Goal</h5>
+            <h5><span id="saveGoalTotal" onclick="editSaveGoal(this)" class="editableSpan">$0</span> Save Goal</h5>
             <h5><span id="leftToBudgetDisplay">$0</span> Left to Budget</h5>
             <h5><span>$0</span> Saved This Month</h5>
         </div>
@@ -42,6 +42,6 @@
             <button for="addCategoryForm" onclick="cancelAddItem(event)" id="cancelItemBtn" class="whiteText" type="submit">Cancel</button>
         </form>
     </div>
-    <script src="test.js"></script>
+    <script src="test.js" ></script>
 </body>
 </html>

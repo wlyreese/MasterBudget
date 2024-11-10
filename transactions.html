@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="transactionStyles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+</head>
+<body>
+    <header id="navBarHeader">
+        <div></div>
+        <button onclick="window.location.href='index.html'"><i class="fa-solid fa-arrow-left"></i> To Budget</button>
+        <h5>Master Budgeter</h5>
+    </header>
+
+    <ul id="transactionDisplayHeader">
+        <li>Name</li>
+        <li>Amount</li>
+        <li>Account</li>
+        <li>Category</li>
+        <li>Date</li>
+        <button>Add Transaction</button>
+    </ul>
+
+    <div id="addTransactionScreenContainer">
+        <form>
+            <label>Name: </label>
+            <input type="text">
+            <label>Amount: </label>
+            <input type="number">
+            <label>Account: </label>
+            <select>
+                <option>Checking</option>
+                <option>Savings</option>
+                <option>Credit</option>
+            </select>
+            <label>Category: </label>
+            <select>
+                <option>Rent</option>
+                <option>Water</option>
+                <option>Food</option>
+            </select>
+            <label>Date: </label>
+            <input type="date">
+            <div>
+                <button>Add</button>
+                <button>Cancel</button> 
+            </div>
+        </form>
+    </div>
+
+    <section id="transactionDisplay">
+        
+    </section>
+
+
+    <script src="transactions.js" defer></script>
+</body>
+</html>

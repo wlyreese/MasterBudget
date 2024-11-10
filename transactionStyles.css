@@ -1,0 +1,187 @@
+body{
+    background-color: hsl(0, 0%, 12%);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 100vh;
+}
+ 
+#navBarHeader{
+    background-color: black;
+    display: grid;
+    grid-template-columns: 75px 100px 1fr 500px 200px;
+    grid-template-areas: 
+    "... anchor ... title ..."
+    ;
+    width: 100%;
+    height: 100px;
+}
+
+#navBarHeader button{
+    grid-area: anchor;
+    text-align: center;
+    align-self: center;
+    font-size: 2rem;
+    width: fit-content;
+    text-wrap: nowrap;
+    background-color: hsl(120, 58%, 20%);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    transition: font-size 150ms ease-in-out, padding 150ms ease-in-out;
+    font-weight: bold;
+}
+
+/* Button Transitions */
+
+#navBarHeader button:hover{
+    background-color: hsl(120, 58%, 30%);
+    font-size: 2.2rem;
+    padding: 10px 17px;
+}
+
+#navBarHeader button:active{
+    background-color: hsl(120, 58%, 40%);
+}
+
+/* Title for NavBar */
+
+#navBarHeader h5{
+    grid-area: title;
+    align-self: center;
+    font-size: 3rem;
+    margin: 0;
+    padding: 0;
+    text-wrap: nowrap;
+    text-align: center;
+    color: white;
+}
+
+/* Transaction Display Container */
+
+#transactionDisplayHeader{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0 30px;
+    margin-top: 10px;
+    background-color: hsl(0, 0%, 20%);
+    border-radius: 10px;
+    padding: 0 10px;
+    height: 40px;
+}
+
+#transactionDisplayHeader li{
+    width: 18%;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+#transactionDisplayHeader button{
+    width: 200px;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    background-color: hsl(120, 58%, 20%);
+    height: 30px;
+    font-size: 1.05rem;
+    transition: 150ms ease-in-out;
+}
+
+#transactionDisplayHeader button:hover{
+    background-color: hsl(120, 58%, 30%);
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+#transactionDisplayHeader button:active{
+    background-color: hsl(120, 58%, 40%);
+}
+
+/* START OF ADD TRANSACTION SCREEN */
+
+#addTransactionScreenContainer{
+    position: absolute;
+    background-color: hsl(0, 0%, 20%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: auto;
+    width: 500px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#addTransactionScreenContainer form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#addTransactionScreenContainer form label{
+    padding: 0;
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: white;
+}
+
+#addTransactionScreenContainer form input{
+    height: 18px;
+    font-size: 1.2rem;
+    padding: 5px;
+    background-color: hsl(0, 0%, 20%);
+    border: 2px solid black;
+}
+
+#addTransactionScreenContainer form select{
+    height: 35px;
+    font-size: 1.2rem;
+    padding: 5px;
+    background-color: hsl(0, 0%, 20%);
+    border: 2px solid black;
+}
+
+#addTransactionScreenContainer form div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+#addTransactionScreenContainer form div button{
+    width: 150px;
+    height: 30px;
+    font-size: 1.2rem;
+    border: none;
+    color: white;
+    transition: 150ms ease-in-out;
+}
+
+#addTransactionScreenContainer form div button:first-of-type{
+    background-color: hsl(120, 58%, 20%);
+}
+
+#addTransactionScreenContainer form div button:first-of-type:hover{
+    background-color: hsl(120, 58%, 30%);
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+#addTransactionScreenContainer form div button:nth-of-type(2){
+    background-color: hsl(0, 100%, 50%);
+}
+
+#addTransactionScreenContainer form div button:nth-of-type(2):hover{
+    background-color: hsl(11, 70%, 35%);
+    font-size: 1.25rem;
+    font-weight: bold;
+}
