@@ -1,5 +1,8 @@
 const itemEditableSpan = document.querySelectorAll("listTitleItem greenLi");
 
+/* TO DO */
+/* STORE ACCOUNT NAMES AND AMOUNTS AS A JSON DATA STRUCTURE SO THEY CAN BE IMPORTED AND REFRECNED BETWEEN PAGES AND FILES. NEEDS TO COMMUNICATE WITH THE TRANSACTION SCREEN*/
+
 const headerArray = () => {
     const retrievedObjectString = localStorage.getItem('myObject');
     const retrievedObject = JSON.parse(retrievedObjectString);
@@ -11,13 +14,37 @@ const headerArray = () => {
     }
 }
 
+const accountJSON = () => {
+    parsedAccountInformation = JSON.parse(localStorage.getItem('accountInformation'));
+    console.log(parsedAccountInformation);
+    if(parsedAccountInformation === null || parsedAccountInformation === undefined){
+        return [];
+    }else{
+        return parsedAccountInformation;
+    }
+
+}
+
+const accountAmounts = accountJSON();
+console.log(accountAmounts);
 const itemArray = headerArray();
 /* ON START */
-console.log(itemArray);
 renderList();
 
 
 /* TEXT/NUMBER FORMATTERS */
+
+/* Captialize first letter */
+function captializeFirstChar(string){
+    if(string.charAt(0) !== ' ' && !isNaN(string.charAt(0))){
+        return string;
+    }else{
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+}
+
+captializeFirstChar("string");
+
 /* FORMATTER FOR TO ADD DOLLAR AND REARRANGE NEGATIVE SIGNS */
 function formatString(amount){
     // Remove existing commas and dollar signs
@@ -80,6 +107,8 @@ function renderList(){
         
         budgetDivDisplay.appendChild(newUl);
     });
+
+    renderAccounts();
 };
 
 
@@ -103,6 +132,34 @@ function renderTitle(){
     budgetDiv.appendChild(titleUl);
 }
 
+function renderAccounts(){
+    const accountsDiv = document.getElementById("accountsDiv");
+    accountsDiv.innerHTML = `<button onclick="openAccountScreen()">Add Account</button>`;
+
+    let id = 0;
+
+    if(accountAmounts == null || accountAmounts == undefined){
+        const noAccountsH5 = document.createElement("h5");
+        noAccountsH5.innerHTML = `NO ACCOUNTS`;
+        accountsDiv.appendChild(noAccountsH5);
+    }
+
+    console.log(accountAmounts);
+    accountAmounts.forEach(account => {
+        account.id = id;
+        id++;
+    });
+
+    accountAmounts.forEach(account => {
+        const newH5 = document.createElement("h5");
+        newH5.innerHTML = `
+        ${captializeFirstChar(account.name)}: <button class="deleteAccountButton" onclick="deleteAccount(${account.id})" ><i class="fa-solid fa-trash"></i></button><span>${formatString(String(account.amount))}</span>
+        `
+        accountsDiv.appendChild(newH5);
+    })
+
+    convertToJSON(accountAmounts, "accountInformation");
+};
 
 
 /* Calculate and render Left to budget display */
@@ -149,7 +206,7 @@ function addItemToDisplay(event){
 
     addCategoryContainer.style.display = "none";
     itemArray.push(newObject);
-    convertToJSON(itemArray);
+    convertToJSON(itemArray, "myObject");
     renderList();
 }
 
@@ -180,7 +237,7 @@ function deleteItem(id){
     const index = itemArray.findIndex(item => item.id === id);
     itemArray.splice(index, 1);
 
-    convertToJSON(itemArray);
+    convertToJSON(itemArray, "myObject");
     renderList();
 }
 
@@ -202,7 +259,7 @@ function makeEditable(element, id){
         element.textContent = tempFormattedText;
 
         updateLeftToBudgetDisplay();
-        convertToJSON(itemArray);
+        convertToJSON(itemArray, "myObject");
     });
 
     element.addEventListener("keydown", (event) => {
@@ -212,8 +269,6 @@ function makeEditable(element, id){
         }
     });
 }
-
-/* EDIT AND UPDATE BUDGET SPANS FOR ELEMENTS */
 
 
 
@@ -264,20 +319,60 @@ function editSaveGoal(element){
 }
 
 /* STORE DATA IN JSON */
-function convertToJSON(itemArray){
+function convertToJSON(itemArray, name){
     
     if(itemArray[0] !== null){
         itemArray.slice([0], 1);
     }
 
+    if(itemArray == null || itemArray == undefined){
+        itemArray
+    }
+
 
     const myArrayOfObjects = JSON.stringify(itemArray);
-    localStorage.setItem('myObject', myArrayOfObjects);
+    localStorage.setItem(`${name}`, myArrayOfObjects);
     console.log(JSON.stringify(itemArray));
-    console.log(itemArray.indexOf(item => item.name == "No Items"));
 }
 
 /* UTILITY FUNCTION TO DELETE STORED JSON */
 function removeItem(item){
     localStorage.removeItem(item);
+}
+
+/* USED TO OPEN THE ADD ACCOUNT SCREEN */
+function openAccountScreen() {
+    const addAccountScreen = document.getElementById("addAccountScreen").style.display = "block";
+}
+
+/* USED TO CLOSE THE ADD ACCOUNT SCREEN */
+
+function closeAddAccountScreen(event){
+    event.preventDefault();
+    const addAccountScreen = document.getElementById("addAccountScreen").style.display = "none";
+    document.getElementById("accountNameInput").value = '';
+}
+
+/* ADD NEW ACCOUNT TO DISPLAY */
+function addNewAccount(event){
+    event.preventDefault();
+    
+    accountAmounts.push({
+        id: accountAmounts.length,
+        name: `${document.getElementById("accountNameInput").value}`,
+        amount: 0
+    });
+    document.getElementById("accountNameInput").value = '';
+    const addAccountScreen = document.getElementById("addAccountScreen").style.display = "none";
+    renderList();
+}
+
+/* DELETE AN ACCOUNT FROM THE DISPLAY */
+
+function deleteAccount(id){
+
+    const index = accountAmounts.findIndex(account => account.id === id);
+    console.log(index);
+    accountAmounts.splice(index, 1);
+    renderList();
 }

@@ -20,40 +20,55 @@
         <li>Account</li>
         <li>Category</li>
         <li>Date</li>
-        <button>Add Transaction</button>
+        <button onclick="openAddTransactionScreen()">Add Transaction</button>
     </ul>
 
     <div id="addTransactionScreenContainer">
         <form>
             <label>Name: </label>
-            <input type="text">
+            <input id="transactionNameInput" type="text">
             <label>Amount: </label>
-            <input type="number">
+            <input id="transactionAmountInput" type="number">
             <label>Account: </label>
-            <select>
-                <option>Checking</option>
-                <option>Savings</option>
-                <option>Credit</option>
+            <select id="accountTypeDropdown">
+                
             </select>
             <label>Category: </label>
-            <select>
-                <option>Rent</option>
-                <option>Water</option>
-                <option>Food</option>
+            <select id="budgetTypeDropdown">
+                
             </select>
             <label>Date: </label>
-            <input type="date">
+            <input id="transactionDateInput" type="date">
             <div>
                 <button>Add</button>
-                <button>Cancel</button> 
+                <button onclick="closeAddTransactionScreen(event)">Cancel</button> 
             </div>
         </form>
     </div>
 
     <section id="transactionDisplay">
-        
+        <ul>
+            <li>Walmart</li>
+            <li>$10.99</li>
+            <li>
+                <select>
+                    <option>Checking</option>
+                </select>
+            </li>
+            <li>
+                <select>
+                    <option>Rent</option>
+                </select>
+            </li>
+            <li>10/27/24</li>
+            <button>Delete</button>
+        </ul>
     </section>
 
+    <div id="noAccountOrBudgetWarning">
+        <h4>You do not have an Account or Budget Category listed. Please go back to the Budget page and add them to contiune.</h4>
+        <button onclick="closeNoAccountOrBudgetWarning()">Close</button>
+    </div>
 
     <script src="transactions.js" defer></script>
 </body>

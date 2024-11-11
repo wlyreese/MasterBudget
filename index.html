@@ -23,9 +23,18 @@
         </div>
 
         <div id="accountsDiv" class="whiteText">
-            <h5>Checking: <span>$0</span></h5>
-            <h5>Credit: <span>$0</span></h5>
-            <h5>Savings: <span>$0</span></h5>
+            <button id="openAccountScreenButton" onclick="openAccountScreen()">Add Account</button>
+        </div>
+
+        <div id="addAccountScreen">
+            <form>
+                <label>Account Name: </label>
+                <input id="accountNameInput" type="text">
+                <div>
+                    <button onclick="addNewAccount(event)">Add</button>
+                    <button onclick="closeAddAccountScreen(event)">Cancel</button>
+                </div>
+            </form>
         </div>
 
         <div id="budgetDiv">
