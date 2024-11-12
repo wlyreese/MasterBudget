@@ -40,29 +40,14 @@
             <label>Date: </label>
             <input id="transactionDateInput" type="date">
             <div>
-                <button>Add</button>
+                <button onclick="createNewTransaction(event)">Add</button>
                 <button onclick="closeAddTransactionScreen(event)">Cancel</button> 
             </div>
         </form>
     </div>
 
     <section id="transactionDisplay">
-        <ul>
-            <li>Walmart</li>
-            <li>$10.99</li>
-            <li>
-                <select>
-                    <option>Checking</option>
-                </select>
-            </li>
-            <li>
-                <select>
-                    <option>Rent</option>
-                </select>
-            </li>
-            <li>10/27/24</li>
-            <button>Delete</button>
-        </ul>
+        
     </section>
 
     <div id="noAccountOrBudgetWarning">

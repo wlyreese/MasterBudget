@@ -1,27 +1,15 @@
-/* ----- GLOBAL VARIABLES ----- */
-const transactionArray = [{
-    id: 0,
-    name: "Walmart",
-    amount: 10.99,
-    account: "Checking",
-    category: "Rent",
-    date: "10/27/24"
-},
-{
-    id: 1,
-    name: "Water",
-    amount: 100.99,
-    account: "Checking",
-    category: "Water",
-    date: "10/28/24"
-}];
+/* GLOBAL VARIABLES */
+
+
+
+
+/* ----- GLOBAL ARRAYS ----- */
+const transactionArray = [];
 
 
 
 /* ----- ON START ----- */
-renderAccountDropdown();
-renderCategoryDropdown();
-
+renderTransactionsToDisplay();
 
 
 /* ----- FORMATTING FUNCTIONS ----- */
@@ -38,29 +26,54 @@ function captializeFirstChar(string){
 
 /* ----- RENDER FUNCTIONS ----- */
 
-/* RENDERS THE ACCOUNTS LIST TO THE DROPDOWN */
-function renderAccountDropdown(){
-    const accountTypeDropdown = document.getElementById("accountTypeDropdown");
+/* RENDERS THE ACCOUNTS LIST TO THE ADD SCREEN DROPDOWN */
+function renderAccountDropdown(element){
     const accountArray = JSON.parse(localStorage.getItem("accountInformation"));
-    
+
     accountArray.forEach(account => {
         const newOption = document.createElement("option");
         newOption.innerHTML = `${captializeFirstChar(account.name)}`
-        accountTypeDropdown.appendChild(newOption);
-    })
-}
+        element.appendChild(newOption);
+    });
 
-/* RENDERS THE CATEGORIES LIST TO THE DROP DOWNS */
-function renderCategoryDropdown(){
-    const budgetTypeDropdown = document.getElementById("budgetTypeDropdown");
+    const transactionAccountDropdown = document.querySelectorAll(".accountDropdown");
+
+    transactionAccountDropdown.forEach(dropdown => {
+    
+        accountArray.forEach(account => {
+            const newOption = document.createElement("option");
+            newOption.innerHTML = `${captializeFirstChar(account.name)}`
+            dropdown.appendChild(newOption);
+        });
+    });
+};
+
+
+
+/* RENDERS THE CATEGORIES LIST TO THE ADD SCREEN DROP DOWNS */
+function renderCategoryDropdown(element){
     const budgetArray = JSON.parse(localStorage.getItem("myObject"));
 
     budgetArray.forEach(budget => {
         const newCategory = document.createElement("option");
         newCategory.innerHTML = `${captializeFirstChar(budget.name)}`
-        budgetTypeDropdown.appendChild(newCategory);
-    })
+        element.appendChild(newCategory);
+    });
+
+    const transactionBudgetDropdown = document.querySelectorAll(".budgetDropdown");
+
+    transactionBudgetDropdown.forEach(dropdown => {
+        const budgetArray = JSON.parse(localStorage.getItem("myObject"));
+    
+        budgetArray.forEach(account => {
+            const newOption = document.createElement("option");
+            newOption.innerHTML = `${captializeFirstChar(account.name)}`
+            dropdown.appendChild(newOption);
+        });
+    });
 }
+
+
 
 /* RENDERS THE TRANSACTION TO THE SCREEN */
 function renderTransactionsToDisplay(){
@@ -74,12 +87,12 @@ function renderTransactionsToDisplay(){
             <li>${transaction.amount}</li>
             <li>
                 <select class="accountDropdown">
-                    <option>Checking</option>
+                    
                 </select>
             </li>
             <li>
                 <select class="budgetDropdown">
-                    <option>Rent</option>
+                
                 </select>
             </li>
             <li>10/27/24</li>
@@ -87,7 +100,10 @@ function renderTransactionsToDisplay(){
         `
 
         document.getElementById("transactionDisplay").appendChild(newUl);
-    })
+    });
+
+    renderAccountDropdown(document.getElementById("accountTypeDropdown"));
+    renderCategoryDropdown(document.getElementById("budgetTypeDropdown"));
 }
 
 
@@ -112,7 +128,9 @@ function openAddTransactionScreen(){
 }
 
 /* CREATE NEW TRANSACTION OBJECT */
-function createNewTransaction(){
+function createNewTransaction(element){
+    element.preventDefault();
+
     const transactionNameInput = document.getElementById("transactionNameInput");
     const transactionAmountInput = document.getElementById("transactionAmountInput");
     const accountTypeDropdown = document.getElementById("accountTypeDropdown");
@@ -128,8 +146,8 @@ function createNewTransaction(){
         category: `${budgetTypeDropdown.value}`,
         date: `${transactionDateInput.value}`
     }
-
-    console.log(newTransactionObject);
+    transactionArray.push(newTransactionObject);
+    renderTransactionsToDisplay();
 }
 
 
