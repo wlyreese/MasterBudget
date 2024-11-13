@@ -24,23 +24,23 @@
     </ul>
 
     <div id="addTransactionScreenContainer">
-        <form>
+        <form id="addTransactionForm">
             <label>Name: </label>
-            <input id="transactionNameInput" type="text">
+            <input required id="transactionNameInput" type="text">
             <label>Amount: </label>
-            <input id="transactionAmountInput" type="number">
+            <input required id="transactionAmountInput" type="text">
             <label>Account: </label>
-            <select id="accountTypeDropdown">
+            <select required id="accountTypeDropdown">
                 
             </select>
             <label>Category: </label>
-            <select id="budgetTypeDropdown">
+            <select required id="budgetTypeDropdown">
                 
             </select>
             <label>Date: </label>
-            <input id="transactionDateInput" type="date">
+            <input required id="transactionDateInput" type="date">
             <div>
-                <button onclick="createNewTransaction(event)">Add</button>
+                <button for="addTransactionForm" onclick="createNewTransaction(event)">Add</button>
                 <button onclick="closeAddTransactionScreen(event)">Cancel</button> 
             </div>
         </form>
