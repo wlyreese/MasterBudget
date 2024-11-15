@@ -31,10 +31,17 @@ function parseJSON(name){
 
 /* STORE DATA IN JSON */
 function convertToJSON(itemArray, name){
-    
-    if(itemArray[0] !== null){
-        itemArray.slice([0], 1);
+
+    if(typeof itemArray === "String"){
+        const myArrayOfObjects = JSON.stringify(itemArray);
+        localStorage.setItem(`${name}`, myArrayOfObjects);
+        console.log(JSON.stringify(itemArray));
+        return;
     }
+    
+/*     if(itemArray[0] !== null){
+        itemArray.slice([0], 1);
+    } */
 
     if(itemArray == null || itemArray == undefined){
         itemArray
@@ -63,7 +70,7 @@ const itemArray = headerArray();
 
 /* ON START */
 renderList();
-
+calculateAccountRemainder();
 
 
 /* TEXT/NUMBER FORMATTERS */
@@ -118,6 +125,9 @@ function containsOtherChars(input) {
 /* Used to render the title of the budget items display */
 function renderList(){
     renderTitle();
+    renderBudgetNumber();
+    renderSaveGoal();
+
     updateLeftToBudgetDisplay();
     if(itemArray == undefined){
         return;
@@ -136,7 +146,7 @@ function renderList(){
         newUl.innerHTML = `
             <li class="listTitleItem">${item.name}</li>
             <li id="${item.id + "li"}" class="listTitleItem greenLi" onclick="makeEditable(this, ${item.id})">${formatString((String(item.budget)))}</li>
-            <li class="listTitleItem">${formatString(String(item.spent))}</li>
+            <li class="${item.name + "spent"} listTitleItem">${formatString(String(item.spent))}</li>
             <li class="listTitleItem">${formatString(String(item.actual))}</li>
             <button onclick="deleteItem(${item.id})"><i class="fa-solid fa-trash"></i></button>
             `;
@@ -150,6 +160,7 @@ function renderList(){
 /* Used to render title and all items on list */
 function renderTitle(){
     const budgetDiv = document.getElementById("budgetDiv");
+
     budgetDiv.textContent = "";
 
     titleUl = document.createElement("ul");
@@ -186,15 +197,17 @@ function renderAccounts(){
     });
 
     accountAmounts.forEach(account => {
+        console.log(account.amount);
         const newH5 = document.createElement("h5");
         newH5.innerHTML = `
-        ${captializeFirstChar(account.name)}: <button class="deleteAccountButton" onclick="deleteAccount(${account.id})" ><i class="fa-solid fa-trash"></i></button><span>${formatString(String(account.amount))}</span>
+        ${captializeFirstChar(account.name)}: <button class="deleteAccountButton" onclick="deleteAccount(${account.id})"><i class="fa-solid fa-trash"></i></button><span>${formatString(String(account.amount))}</span>
         `
         accountsDiv.appendChild(newH5);
     })
 
     convertToJSON(accountAmounts, "accountInformation");
 };
+
 
 
 
@@ -207,11 +220,15 @@ function editBudget(element){
     element.focus();  
     element.textContent = "";
 
+    let budgetNumber = 0;
+
     element.addEventListener("blur", () => {
         element.removeAttribute("contenteditable");
         tempFormattedText = formatString(String(containsOtherChars(element.textContent) ? 0 : element.textContent));
 
         element.textContent = tempFormattedText;
+        convertToJSON(tempFormattedText, "budgetNumber");
+        renderBudgetNumber();
         updateLeftToBudgetDisplay();
     });
 
@@ -221,6 +238,11 @@ function editBudget(element){
             element.removeAttribute("contenteditable");
         }
     });
+};
+
+/* Renders Budget Number to the screen */
+function renderBudgetNumber(){
+    document.getElementById("budgetTotal").textContent = parseJSON("budgetNumber");
 }
 
 /* Edit the save goal number */
@@ -234,6 +256,9 @@ function editSaveGoal(element){
         tempFormattedText = formatString(String(containsOtherChars(element.textContent) ? 0 : element.textContent));
 
         element.textContent = tempFormattedText;
+        convertToJSON(tempFormattedText, "saveGoal");
+        element.textContent = tempFormattedText;
+        renderSaveGoal();
         updateLeftToBudgetDisplay();
     });
 
@@ -245,7 +270,10 @@ function editSaveGoal(element){
     });
 }
 
-
+/* Renders Save Goal to the screen */
+function renderSaveGoal(){
+    document.getElementById("saveGoalTotal").textContent = parseJSON("saveGoal");
+}
 
 
 
@@ -333,8 +361,38 @@ function makeEditable(element, id){
     });
 }
 
+/* CALCULATE AND RENDER AMOUNT BUDGETED */
+function calculateAmountAllocatedToCategory(){
+    const transactionsArray = parseJSON("transactionsObjects");
+    transactionsArray.forEach(transaction =>{
+        const transactionAmount = transaction.amount
+    })
+    itemArray
+}
+
+/* CALCULATES HOW MUCH HAS BEEN ALLOCATED TO AN ITEM */
+function calculateAllocationToBudgetItem(){
+   console.log(transactionsArray);
+   console.log(itemArray);
 
 
+   transactionsArray.forEach(transaction => {
+       const listSpentItem = document.querySelectorAll(".listSpentItem");
+        itemArray.forEach(item => {
+            item.spent = 0;
+        });
+        const index = itemArray.findIndex(item => item.name == transaction.category);
+        if(index === -1){
+            console.log(`${transaction.category} is not in the array.`);
+            return;
+        }
+        transaction.amount = removeSymbolsAndConvertToNumber(transaction.amount);
+        console.log(transaction.category);
+        console.log(itemArray.findIndex(item => item.name === transaction.category));
+        itemArray[index].spent += transaction.amount;
+   });
+}
+calculateAllocationToBudgetItem();
 
 
 /* ----- ADD/DELETE ACCOUNT SCREEN ----- */
@@ -383,13 +441,37 @@ function addNewAccount(event){
     
     accountAmounts.push({
         id: accountAmounts.length,
-        name: `${document.getElementById("accountNameInput").value}`,
+        name: `${captializeFirstChar(document.getElementById("accountNameInput").value)}`,
         amount: 0
     });
     document.getElementById("accountNameInput").value = '';
     const addAccountScreen = document.getElementById("addAccountScreen").style.display = "none";
     renderList();
 }
+
+/* CALCULATE ACCOUNT AMOUNTS */
+function calculateAccountRemainder(){
+    const transactionsArray = parseJSON("transactionsObjects");
+    console.log(transactionsArray);
+
+    accountAmounts.forEach(account => {
+        account.amount = 0;
+    });
+
+    transactionsArray.forEach(transaction => {
+        const accountName = transaction.account;
+        const accountAmount = Number(transaction.amount);
+        const index = accountAmounts.findIndex(account => account.name == accountName);
+        let totalAmount = accountAmounts[index].amount;
+        totalAmount += accountAmount;
+        accountAmounts[index].amount = totalAmount;
+    });
+
+    renderList();
+}
+
+
+
 
 /* ----- UTILITY FUNCTIONS ----- */
 /* UTILITY FUNCTION TO DELETE STORED JSON */

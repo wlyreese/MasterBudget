@@ -61,7 +61,7 @@ function convertToJSON(itemArray, name){
 /* JSON -----> JAVASCIPT */
 function parseJSON(name){
     const item = localStorage.getItem(`${name}`);
-    return JSON.parse(item);
+    return JSON.parse(item) == null ? [] : JSON.parse(item);
 }
 
 
@@ -97,6 +97,10 @@ function renderCategoryDropdown(element){
     element.innerHTML = "";
     const budgetArray = JSON.parse(localStorage.getItem("myObject"));
 
+    if(element.id === "budgetTypeDropdown"){
+        element.innerHTML = "<option>Account Update</option>";
+    }
+
     budgetArray.forEach(budget => {
         const newCategory = document.createElement("option");
         newCategory.innerHTML = `${captializeFirstChar(budget.name)}`
@@ -119,6 +123,9 @@ function renderCategoryDropdown(element){
 /* RENDERS THE TRANSACTION TO THE SCREEN */
 function renderTransactionsToDisplay(){
 
+    if(transactionArray === null){
+        transactionArray ;
+    }
 
     if(transactionArray.length !== 0){
         let counter = 0;
